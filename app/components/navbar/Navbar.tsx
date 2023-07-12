@@ -20,7 +20,7 @@ const Navbar = () => {
               items-center
               justify-between
               gap-3
-              md:gap-0
+              md:gap-1
             "
           >
             <Logo />

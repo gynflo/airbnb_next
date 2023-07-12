@@ -29,7 +29,7 @@ const UserMenu = () => {
                 transition
                 cursor-pointer"
         >
-          Airbnb your home
+          Mettre mon logement sur Airbnb
         </div>
         <div
           onClick={toggleOpen}
@@ -61,7 +61,7 @@ const UserMenu = () => {
         <div
           className="
                 absolute
-                top-12
+                top-20
                 right-0
                 rounded-xl
                 shadow-md
@@ -78,8 +78,12 @@ const UserMenu = () => {
                     cursor-pointer"
           >
             <>
-              <MenuItem onClick={() => {}} label="Login" />
-              <MenuItem onClick={() => {}} label="Sign up" />
+              <MenuItem
+                onClick={() => {}}
+                label="Inscription"
+                className="font-extrabold"
+              />
+              <MenuItem onClick={() => {}} label="Connexion" />
             </>
           </div>
         </div>
