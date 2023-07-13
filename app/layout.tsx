@@ -4,7 +4,9 @@ import "./globals.css";
 // Components
 import Navbar from "@/components/navbar/Navbar";
 import ClientOnly from "@/components/ClientOnly";
-import Modal from "@/components/modals/Modal";
+import RegisterModal from "./components/modals/RegisterModal";
+// Providers
+import ToasterProvider from "./providers/ToasterProvider";
 
 export const metadata = {
   title: "Airbnb Clone via Next",
@@ -24,8 +26,9 @@ export default function RootLayout({
     <html lang="fr">
       <body className={font.className}>
         <ClientOnly>
-          <Modal isOpen title="Hello World" actionLabel="Submit" />
-          <Navbar />
+          <ToasterProvider/>
+            <RegisterModal />
+            <Navbar />
         </ClientOnly>
 
         {children}

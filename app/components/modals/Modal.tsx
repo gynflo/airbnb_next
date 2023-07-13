@@ -10,12 +10,12 @@ interface ModalProps {
   onClose: () => void;
   onSubmit: () => void;
 
-  secondaryAction?: () => void;
   title?: string;
   body?: React.ReactElement;
   footer?: React.ReactElement;
   disabled?: boolean;
   secondaryActionLabel?: string;
+  secondaryAction?: () => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -30,7 +30,7 @@ const Modal: React.FC<ModalProps> = ({
   onSubmit,
   secondaryAction,
 }) => {
-  const [showmodal, setShowModal] = useState(isOpen);
+  const [showModal, setShowModal] = useState(isOpen);
 
   useEffect(() => {
     setShowModal(isOpen);
@@ -107,8 +107,8 @@ const Modal: React.FC<ModalProps> = ({
                     translate
                     duration-300
                     h-full
-                    ${showmodal ? "translate-y-0" : "translate-y-full"}
-                    ${showmodal ? "opacity-100" : "opacity-0"}
+                    ${showModal ? "translate-y-0" : "translate-y-full"}
+                    ${showModal ? "opacity-100" : "opacity-0"}
                 `}
           >
             <div
@@ -143,6 +143,7 @@ const Modal: React.FC<ModalProps> = ({
                 "
               >
                 <button
+                  onClick={handleClose}
                   className="
                         absolute
                         left-9
@@ -182,6 +183,7 @@ const Modal: React.FC<ModalProps> = ({
                     onClick={handleSubmit}
                   />
                 </div>
+                {footer}
               </div>
             </div>
           </div>
