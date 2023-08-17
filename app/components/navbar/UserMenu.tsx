@@ -1,13 +1,26 @@
 "use client";
 
 import { AiOutlineMenu } from "react-icons/ai";
-import Avatar from "../Avatar";
 import { useCallback, useState } from "react";
-import MenuItem from "./MenuItem";
-import useRegisterModal from "@/hooks/useRegisterModal";
 
-const UserMenu = () => {
+import Avatar from "../Avatar";
+import MenuItem from "./MenuItem";
+/* Hooks */
+import useRegisterModal from "@/hooks/useRegisterModal";
+import useLoginModal from "@/hooks/useLoginModal";
+
+import { User } from "@prisma/client";
+import { signOut } from "next-auth/react";
+
+interface UserMenuProps {
+  currentUser?: User | null;
+}
+
+
+const UserMenu = ({currentUser}: UserMenuProps) => {
   const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
@@ -79,14 +92,44 @@ const UserMenu = () => {
                     flex-col
                     cursor-pointer"
           >
-            <>
+            {currentUser ? (
+              <>
+              <MenuItem
+                onClick={() => {}}
+                label="Mes voyages"
+                className="font-extrabold"
+              />
+              <MenuItem 
+                onClick={() => {}} 
+                label="Mes favoris" />
+              <MenuItem 
+                onClick={() => {}} 
+                label="Mes réservations" />
+              <MenuItem 
+                onClick={() => {}} 
+                label="Mes propriétés" />
+              <MenuItem 
+                onClick={() => {}} 
+                label="Airbnb my home" />
+                <hr/>
+              <MenuItem 
+                onClick={() => signOut()} 
+                label="Déconnexion" />
+            </>
+            ) : (
+              <>
               <MenuItem
                 onClick={registerModal.onOpen}
                 label="Inscription"
                 className="font-extrabold"
               />
-              <MenuItem onClick={() => {}} label="Connexion" />
+              <MenuItem 
+                onClick={loginModal.onOpen} 
+                label="Connexion" />
             </>
+            )}
+            
+
           </div>
         </div>
       )}

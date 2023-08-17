@@ -1,11 +1,12 @@
 "use client";
 
+import {signIn} from 'next-auth/react';
 import axios from "axios";
 import { useState, useCallback } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import useRegisterModal from "@/hooks/useRegisterModal";
 import useLoginModal from "@/hooks/useLoginModal";
+import useRegisterModal from "@/hooks/useRegisterModal";
 
 
 //Components
@@ -19,18 +20,21 @@ import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
 import { toast } from "react-hot-toast";
+import { useRouter } from 'next/navigation';
 
-const RegisterModal = () => {
+
+const LoginModal = () => {
+  const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
-  const loginModal = useLoginModal()
+  
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
@@ -39,22 +43,28 @@ const RegisterModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    axios
-      .post("/api/register", data)
-      .then(() => {
-        registerModal.onClose();
-      })
-      .catch((error: any) => {
-        toast.error("Quelque chose s'est mal passé");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    signIn('credentials', {
+      ...data,
+      redirect: false
+    })
+    .then((callback) => {
+      setIsLoading(false);
+
+      if(callback?.ok) {
+        toast.success('Connecté !');
+        router.refresh();
+        loginModal.onClose();
+      }
+
+      if(callback?.error) {
+        toast.error('Veuillez vérifier vos identifiants');
+      }
+    })
   };
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Bienvenue sur Airbnb" subtitle="Créer un compte" />
+      <Heading title="Bienvenue sur Airbnb" subtitle="Connexion à votre compte" />
       <Input
         id="email"
         label="Email"
@@ -62,15 +72,7 @@ const RegisterModal = () => {
         register={register}
         errors={errors}
         required
-      />
-      <Input
-        id="name"
-        label="Name"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
+      />    
       <Input
         id="password"
         type="password"
@@ -107,12 +109,12 @@ const RegisterModal = () => {
           "
       >
         <div className="flex items-center justify-center gap-2">
-          <div>Déjà un compte ?</div>
+          <div>Pas encore de compte ?</div>
           <div
-            onClick={loginModal.onOpen}
+            onClick={registerModal.onOpen}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
-            Connexion
+            Inscription
           </div>
         </div>
       </div>
@@ -122,10 +124,10 @@ const RegisterModal = () => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={registerModal.isOpen}
-      title="Inscription"
+      isOpen={loginModal.isOpen}
+      title="Connexion"
       actionLabel="Continuer"
-      onClose={registerModal.onClose}
+      onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
@@ -133,4 +135,4 @@ const RegisterModal = () => {
   );
 };
 
-export default RegisterModal;
+export default LoginModal;
