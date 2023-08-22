@@ -1,26 +1,23 @@
 "use client";
 
 import {signIn} from 'next-auth/react';
-import axios from "axios";
-import { useState, useCallback } from "react";
+import { useState} from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-
+import { toast } from "react-hot-toast";
+import { useRouter } from 'next/navigation';
+//Hooks
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
-
-
 //Components
 import Modal from "./Modal";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Button from "../Button";
-
 // Icons
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
-import { toast } from "react-hot-toast";
-import { useRouter } from 'next/navigation';
+
 
 
 const LoginModal = () => {
@@ -92,13 +89,13 @@ const LoginModal = () => {
         outline
         label="Continuer avec Google"
         icon={FcGoogle}
-        onClick={() => {}}
+        onClick={() => signIn('google')}
       />
       <Button
         outline
         label="Continuer avec Github"
         icon={AiFillGithub}
-        onClick={() => {}}
+        onClick={() => signIn('github')}
       />
       <div
         className="

@@ -9,15 +9,14 @@ import MenuItem from "./MenuItem";
 import useRegisterModal from "@/hooks/useRegisterModal";
 import useLoginModal from "@/hooks/useLoginModal";
 
-import { User } from "@prisma/client";
+import type { SafeUser } from "@/types";
 import { signOut } from "next-auth/react";
 
 interface UserMenuProps {
-  currentUser?: User | null;
+  currentUser?: SafeUser | null;
 }
 
-
-const UserMenu = ({currentUser}: UserMenuProps) => {
+const UserMenu = ({ currentUser }: UserMenuProps) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
 
@@ -68,7 +67,7 @@ const UserMenu = ({currentUser}: UserMenuProps) => {
                 hidden md:block
             "
           >
-            <Avatar />
+            <Avatar src={currentUser?.image} />
           </div>
         </div>
       </div>
@@ -94,42 +93,28 @@ const UserMenu = ({currentUser}: UserMenuProps) => {
           >
             {currentUser ? (
               <>
-              <MenuItem
-                onClick={() => {}}
-                label="Mes voyages"
-                className="font-extrabold"
-              />
-              <MenuItem 
-                onClick={() => {}} 
-                label="Mes favoris" />
-              <MenuItem 
-                onClick={() => {}} 
-                label="Mes réservations" />
-              <MenuItem 
-                onClick={() => {}} 
-                label="Mes propriétés" />
-              <MenuItem 
-                onClick={() => {}} 
-                label="Airbnb my home" />
-                <hr/>
-              <MenuItem 
-                onClick={() => signOut()} 
-                label="Déconnexion" />
-            </>
+                <MenuItem
+                  onClick={() => {}}
+                  label="Mes voyages"
+                  className="font-extrabold"
+                />
+                <MenuItem onClick={() => {}} label="Mes favoris" />
+                <MenuItem onClick={() => {}} label="Mes réservations" />
+                <MenuItem onClick={() => {}} label="Mes propriétés" />
+                <MenuItem onClick={() => {}} label="Airbnb my home" />
+                <hr />
+                <MenuItem onClick={() => signOut()} label="Déconnexion" />
+              </>
             ) : (
               <>
-              <MenuItem
-                onClick={registerModal.onOpen}
-                label="Inscription"
-                className="font-extrabold"
-              />
-              <MenuItem 
-                onClick={loginModal.onOpen} 
-                label="Connexion" />
-            </>
+                <MenuItem
+                  onClick={registerModal.onOpen}
+                  label="Inscription"
+                  className="font-extrabold"
+                />
+                <MenuItem onClick={loginModal.onOpen} label="Connexion" />
+              </>
             )}
-            
-
           </div>
         </div>
       )}
