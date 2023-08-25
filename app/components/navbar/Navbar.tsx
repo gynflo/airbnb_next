@@ -34,7 +34,7 @@ const Navbar = ({ currentUser }: NavbarProps) => {
             <UserMenu currentUser={currentUser} />
           </div>
         </Container>
-        <Categories />
+        <Categories/>
       </div>
     </div>
   );

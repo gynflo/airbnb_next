@@ -1,10 +1,10 @@
 "use client";
 
-import {signIn} from 'next-auth/react';
-import { useState} from "react";
+import { signIn } from "next-auth/react";
+import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 //Hooks
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
@@ -17,13 +17,10 @@ import Button from "../Button";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
-
-
-
 const LoginModal = () => {
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const {
@@ -40,28 +37,35 @@ const LoginModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    signIn('credentials', {
+    signIn("credentials", {
       ...data,
-      redirect: false
-    })
-    .then((callback) => {
+      redirect: false,
+    }).then((callback) => {
       setIsLoading(false);
 
-      if(callback?.ok) {
-        toast.success('Connecté !');
+      if (callback?.ok) {
+        toast.success("Connecté !");
         router.refresh();
         loginModal.onClose();
       }
 
-      if(callback?.error) {
-        toast.error('Veuillez vérifier vos identifiants');
+      if (callback?.error) {
+        toast.error("Veuillez vérifier vos identifiants");
       }
-    })
+    });
   };
+
+  const toggleModal = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [registerModal, loginModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Bienvenue sur Airbnb" subtitle="Connexion à votre compte" />
+      <Heading
+        title="Bienvenue sur Airbnb"
+        subtitle="Connexion à votre compte"
+      />
       <Input
         id="email"
         label="Email"
@@ -69,7 +73,7 @@ const LoginModal = () => {
         register={register}
         errors={errors}
         required
-      />    
+      />
       <Input
         id="password"
         type="password"
@@ -89,13 +93,13 @@ const LoginModal = () => {
         outline
         label="Continuer avec Google"
         icon={FcGoogle}
-        onClick={() => signIn('google')}
+        onClick={() => signIn("google")}
       />
       <Button
         outline
         label="Continuer avec Github"
         icon={AiFillGithub}
-        onClick={() => signIn('github')}
+        onClick={() => signIn("github")}
       />
       <div
         className="
@@ -108,10 +112,10 @@ const LoginModal = () => {
         <div className="flex items-center justify-center gap-2">
           <div>Pas encore de compte ?</div>
           <div
-            onClick={registerModal.onOpen}
+            onClick={toggleModal}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
-            Inscription
+            Créer un compte
           </div>
         </div>
       </div>

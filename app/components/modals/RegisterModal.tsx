@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
@@ -17,10 +17,9 @@ import Button from "../Button";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
-
 const RegisterModal = () => {
   const registerModal = useRegisterModal();
-  const loginModal = useLoginModal()
+  const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -49,6 +48,11 @@ const RegisterModal = () => {
         setIsLoading(false);
       });
   };
+
+  const toggleModal = useCallback(() => {
+    registerModal.onClose();
+    loginModal.onOpen();
+  }, [registerModal, loginModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -88,13 +92,13 @@ const RegisterModal = () => {
         outline
         label="Continuer avec Google"
         icon={FcGoogle}
-        onClick={() => signIn('google')}
+        onClick={() => signIn("google")}
       />
       <Button
         outline
         label="Continuer avec Github"
         icon={AiFillGithub}
-        onClick={() => signIn('github')}
+        onClick={() => signIn("github")}
       />
       <div
         className="
@@ -107,7 +111,7 @@ const RegisterModal = () => {
         <div className="flex items-center justify-center gap-2">
           <div>Déjà un compte ?</div>
           <div
-            onClick={loginModal.onOpen}
+            onClick={toggleModal}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
             Connexion

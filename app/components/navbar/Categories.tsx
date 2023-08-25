@@ -21,6 +21,7 @@ import { MdOutlineVilla } from "react-icons/md";
 import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 
+/* Array of Category */
 export const categories = [
   {
     label: "Beach",
